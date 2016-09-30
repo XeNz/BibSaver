@@ -75,7 +75,7 @@ public class MainActivity extends Activity {
             JsonObjectRequest jr = new JsonObjectRequest(Request.Method.GET, urlBibliotheken, obj, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    hideSoftKeyBoard();
+//                    hideSoftKeyBoard();
                     try {
                         helper.saveBibliotheken(response.getJSONArray("data"));
                         setPreferences(true);
@@ -103,7 +103,7 @@ public class MainActivity extends Activity {
             addAllMarkers();
         }
 
-
+        //center map op meistraat
         locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
         if(!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ) {
             Toast.makeText(getApplicationContext(), "GPS not enabled!", Toast.LENGTH_SHORT).show();
@@ -117,7 +117,7 @@ public class MainActivity extends Activity {
         }
     }
 
-
+    //check of db gevuld is
     private void setPreferences(boolean b) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -146,19 +146,20 @@ public class MainActivity extends Activity {
         return super.dispatchTouchEvent(ev);
     }
 
-    private void hideSoftKeyBoard() {
-        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-
-        if(imm.isAcceptingText()) { // verify if the soft keyboard is open
-            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-        }
-    }
+//    private void hideSoftKeyBoard() {
+//        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+//
+//        if(imm.isAcceptingText()) { // verify if the soft keyboard is open
+//            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+//        }
+//    }
+    //voeg 1 marker toe
     private void addMarker(GeoPoint g, String naam) {
-        OverlayItem myLocationOverlayItem = new OverlayItem(naam, "Current Position", g);
-        Drawable myCurrentLocationMarker = ResourcesCompat.getDrawable(getResources(), R.drawable.marker, null);
-        myLocationOverlayItem.setMarker(myCurrentLocationMarker);
+        OverlayItem locOverlayItem = new OverlayItem(naam, "", g);
+        Drawable locMarker = ResourcesCompat.getDrawable(getResources(), R.drawable.marker, null);
+        locOverlayItem.setMarker(locMarker);
 
-        items.add(myLocationOverlayItem);
+        items.add(locOverlayItem);
         DefaultResourceProxyImpl resourceProxy = new DefaultResourceProxyImpl(getApplicationContext());
 
         ItemizedIconOverlay<OverlayItem> currentLocationOverlay = new ItemizedIconOverlay<OverlayItem>(items,
@@ -173,6 +174,7 @@ public class MainActivity extends Activity {
         this.mapView.getOverlays().add(currentLocationOverlay);
         this.mapView.invalidate();
     }
+    //voeg alle markers toe
     private void addAllMarkers(){
 
         for (int i = 0; i < allBibliotheken.size(); i++) {
